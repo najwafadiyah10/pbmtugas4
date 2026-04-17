@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'movie_list_page.dart';
+import 'history.dart'; // 🔧 import list global bookingHistory
 
 class TicketPage extends StatelessWidget {
   final String movieTitle;
@@ -17,6 +19,14 @@ class TicketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 🔧 simpan tiket ke riwayat saat halaman dibuka
+    bookingHistory.add({
+      "movie": movieTitle,
+      "date": date,
+      "time": time,
+      "seat": seat,
+    });
+
     return Scaffold(
       body: Stack(
         children: [
@@ -44,7 +54,6 @@ class TicketPage extends StatelessWidget {
               ),
             ),
           ),
-
           Positioned(
             bottom: -100,
             right: -100,
@@ -80,9 +89,7 @@ class TicketPage extends StatelessWidget {
                       children: [
                         const Icon(Icons.confirmation_number,
                             size: 70, color: Colors.white),
-
                         const SizedBox(height: 10),
-
                         const Text(
                           "Your Ticket 🎟️",
                           style: TextStyle(
@@ -91,7 +98,6 @@ class TicketPage extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-
                         const SizedBox(height: 20),
 
                         /// INFO TIKET
@@ -127,7 +133,9 @@ class TicketPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             Navigator.popUntil(
-                                context, (route) => route.isFirst);
+                              context,
+                              (route) => route.settings.name == "/movieList",
+                            );
                           },
                           child: Container(
                             width: double.infinity,
@@ -181,8 +189,7 @@ class TicketPage extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                  color: Colors.white, fontSize: 16),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ],

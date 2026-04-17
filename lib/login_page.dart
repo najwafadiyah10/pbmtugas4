@@ -21,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+
 // enih fungsi login yang nyenggol validatornya
 void _login() {
   if (_formKey.currentState!.validate()) {
@@ -105,8 +106,7 @@ void _login() {
     );
   }
 }
-
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,6 +161,7 @@ void _login() {
                               ),
                             ),
 
+
                             const SizedBox(height: 25),
 
                             /// USERNAME
@@ -187,7 +188,6 @@ void _login() {
                                 return null;
                               },
                             ),
-
                             const SizedBox(height: 15),
 
                             /// PASSWORD
@@ -218,9 +218,10 @@ void _login() {
                               },
                             ),
 
+                            /// BUTTON LOGIN pakai onPresse
                             const SizedBox(height: 25),
 
-                            /// BUTTON LOGIN pakai onPressed
+                            /// BUTTON LOGIN
                             SizedBox(
                               width: double.infinity,
                               height: 55,
@@ -231,7 +232,9 @@ void _login() {
                                   ),
                                   backgroundColor: Colors.deepPurple,
                                 ),
-                                onPressed: _login, // ✅ panggil fungsi login
+
+                                onPressed: _login,
+
                                 child: const Text(
                                   "LOGIN",
                                   style: TextStyle(

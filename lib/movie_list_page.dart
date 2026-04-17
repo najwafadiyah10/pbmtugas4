@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'movie_detail_page.dart';
+import 'history_page.dart'; // 🔧 halaman riwayat
 
 class MovieListPage extends StatefulWidget {
   final String username;
@@ -20,6 +21,29 @@ class _MovieListPageState extends State<MovieListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /// 🔧 AppBar tanpa tombol back, tapi ada tombol History
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(
+          "XIII Movie",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black.withOpacity(0.3), // biar kontras
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history, color: Colors.white),
+            tooltip: "Lihat Riwayat Pemesanan",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const HistoryPage()),
+              );
+            },
+          ),
+        ],
+      ),
+
       body: Stack(
         children: [
           /// BACKGROUND
@@ -46,7 +70,6 @@ class _MovieListPageState extends State<MovieListPage> {
               ),
             ),
           ),
-
           Positioned(
             bottom: -100,
             right: -100,
@@ -76,14 +99,11 @@ class _MovieListPageState extends State<MovieListPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
                   const SizedBox(height: 5),
-
                   const Text(
                     "Mau nonton apa hari ini? 🍿",
                     style: TextStyle(color: Colors.white70),
                   ),
-
                   const SizedBox(height: 20),
 
                   /// LIST FILM
@@ -117,8 +137,7 @@ class _MovieListPageState extends State<MovieListPage> {
                                     color: Colors.white.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(20),
                                     border: Border.all(
-                                      color:
-                                          Colors.white.withOpacity(0.2),
+                                      color: Colors.white.withOpacity(0.2),
                                     ),
                                   ),
                                   child: Row(
@@ -143,7 +162,6 @@ class _MovieListPageState extends State<MovieListPage> {
                                           size: 30,
                                         ),
                                       ),
-
                                       const SizedBox(width: 15),
 
                                       /// INFO
@@ -157,8 +175,7 @@ class _MovieListPageState extends State<MovieListPage> {
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18,
-                                                fontWeight:
-                                                    FontWeight.bold,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             const SizedBox(height: 5),
@@ -170,7 +187,6 @@ class _MovieListPageState extends State<MovieListPage> {
                                           ],
                                         ),
                                       ),
-
                                       const Icon(
                                         Icons.arrow_forward_ios,
                                         color: Colors.white70,

@@ -23,28 +23,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
 
   List<String> seats = ["A1", "A2", "A3", "B1", "B2", "B3"];
   List<String> unavailableSeats = ["A2", "B3"];
-
-  Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2024),
-      lastDate: DateTime(2026),
-    );
-    if (picked != null) {
-      setState(() => selectedDate = picked);
-    }
-  }
-
-  Future<void> _pickTime() async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      setState(() => selectedTime = picked.format(context));
-    }
-  }
+  List<String> showTimes = ["09.00", "10.30", "15.10", "18.00", "20.25", "21.35"];
 
   void _bookTicket() {
     if (selectedSeat == null || selectedTime == null) {
@@ -67,8 +46,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
       MaterialPageRoute(
         builder: (_) => TicketPage(
           movieTitle: widget.title,
-          date:
-              "${selectedDate.year}-${selectedDate.month}-${selectedDate.day}",
+          date: "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
           time: selectedTime!,
           seat: selectedSeat!,
         ),
@@ -79,6 +57,15 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Stack(
         children: [
           /// BACKGROUND
@@ -105,7 +92,6 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
               ),
             ),
           ),
-
           Positioned(
             bottom: -100,
             right: -100,
@@ -132,9 +118,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(25),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.2),
-                      ),
+                      border: Border.all(color: Colors.white.withOpacity(0.2)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,9 +132,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                             color: Colors.white,
                           ),
                         ),
-
                         const SizedBox(height: 8),
-
                         Text(
                           widget.description,
                           style: const TextStyle(
@@ -158,29 +140,50 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                             height: 1.4,
                           ),
                         ),
+                        const SizedBox(height: 20),
+
+                        /// DATE
+                        _buildButton(
+                          icon: Icons.date_range,
+                          text:
+                              "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                          onTap: () {},
+                        ),
 
                         const SizedBox(height: 20),
 
-                        /// DATE & TIME
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _buildButton(
-                                icon: Icons.date_range,
-                                text:
-                                    "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
-                                onTap: _pickDate,
+                        /// SHOW TIMES
+                        const Text("Pilih Jam Tayang 🕒",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: showTimes.map((time) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedTime = time;
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: selectedTime == time
+                                      ? Colors.purple
+                                      : Colors.white.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  time,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: _buildButton(
-                                icon: Icons.access_time,
-                                text: selectedTime ?? "Pilih Jam",
-                                onTap: _pickTime,
-                              ),
-                            ),
-                          ],
+                            );
+                          }).toList(),
                         ),
 
                         const SizedBox(height: 20),
@@ -190,16 +193,13 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),
-
                         const SizedBox(height: 10),
-
                         Wrap(
                           spacing: 10,
                           runSpacing: 10,
                           children: seats.map((seat) {
                             final isUnavailable =
                                 unavailableSeats.contains(seat);
-
                             return GestureDetector(
                               onTap: isUnavailable
                                   ? null
@@ -243,9 +243,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold)),
-
                               const SizedBox(height: 8),
-
                               _info("Film", widget.title),
                               _info(
                                   "Tanggal",
